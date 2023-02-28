@@ -125,7 +125,7 @@ promptQuestions();
 function createTeam () {
   console.log("new guy", newTeamMemberData)
   fs.writeFileSync(
-    "./output/index.html",
+    "./output/Team.html",
     render(newTeamMemberData),
     "utf-8"
   );
