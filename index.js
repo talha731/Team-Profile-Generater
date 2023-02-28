@@ -12,7 +12,7 @@ const render = require("./src/page-template.js");
 
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
-
+const promptForManager = () =>{
 inquirer.prompt([{
     type: "input",
     name: "Name",
@@ -38,7 +38,8 @@ inquirer.prompt([{
 ]).then(response => {
     // populate manager info
     // promptForNexEMployee ()
-})
+})}
+promptForManager();
 
 const promptForNextEmployee = () => {
     inquirer.prompt([{
@@ -57,7 +58,7 @@ const promptForNextEmployee = () => {
         //    use the functionality from page-template to generate the team
     })
 }
-
+promptForNextEmployee();
 const promptForEngineer = () => {
     inquirer.prompt([
         {
@@ -82,6 +83,7 @@ const promptForEngineer = () => {
         // promptForNextEmployee
     })
 }
+// promptForEngineer();
 
 const promptForIntern = () => {
     inquirer.prompt([
@@ -107,7 +109,19 @@ const promptForIntern = () => {
         // promptForNextEmployee
     })
 }
+promptForIntern();
 
 const buildPage = () => {
 
 }
+function writeToFile(fileName, data) {
+    return fs.writeFileSync(path.join(process.cwd(), fileName), data);
+  }
+// creating the HTML
+function init() {
+    inquirer.prompt(questions).then((responses) => {
+      console.log("Creating Your Team Profile File...");
+      writeToFile("./output/Team.html", generateTeam({ ...responses }));
+    });
+  }
+  init();

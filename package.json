@@ -4,5 +4,25 @@
   },
   "dependencies": {
     "inquirer": "^6.5.0"
-  }
+  },
+  "name": "team_page_builder",
+  "description": "Builds an Html file that describes my development team",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talha731/Team-Profile-Generater.git"
+  },
+  "author": "Muhammad Talha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/talha731/Team-Profile-Generater/issues"
+  },
+  "homepage": "https://github.com/talha731/Team-Profile-Generater#readme"
 }
