@@ -5,7 +5,7 @@ This project uses node js and its systems to generate a team profile for an orga
 ## Deployed Application URL
 later
 ## Screenshot
-![alt-text](add in later)
+(![image](https://user-images.githubusercontent.com/118377080/221971407-429d35d0-1536-46d6-af95-5f15d8138a4a.png))
 ## Table of Contents
 * [Features](#features)
 * [Languages & Dependencies](#languagesanddependencies)
