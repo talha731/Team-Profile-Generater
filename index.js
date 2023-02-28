@@ -12,116 +12,121 @@ const render = require("./src/page-template.js");
 
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
-const promptForManager = () =>{
-inquirer.prompt([{
-    type: "input",
-    name: "Name",
-    message: "What is your team manager's name?"
-},
-{
-    type: "input",
-    name: "Office Number",
-    message: "What is your team manager's office number?"
-},{
-    type: "input",
-    name: "Email",
-    message: "What is your team manager's email?"
-},{
-    type: "input",
-    name: "Github account",
-    message: "What is your team manager's Github user name?"
-},{
-    type: "input",
-    name: "ID",
-    message: "What is your team manager's ID number?"
-},
-]).then(response => {
-    // populate manager info
-    // promptForNexEMployee ()
-})}
-promptForManager();
-
-const promptForNextEmployee = () => {
-    inquirer.prompt([{
-        
-            type: "checkbox",
-            message: "Which type of team member would you like to add next.",
-            choices: ["Engineer", "Intern", "Thats all",],
-          
-    }]).then(response => {
-        // if engineer
-        //    promptForEngineer
-        
-        // else if intern
-        //    promptForIntern
-        // else
-        //    use the functionality from page-template to generate the team
-    })
-}
-promptForNextEmployee();
-const promptForEngineer = () => {
-    inquirer.prompt([
+const newTeamMemberData = [];
+const questions = async () => {
+    const answers = await inquirer
+      .prompt([
         {
-            type: "input",
-            name: "Name",
-            message: "What is the engineer's name?"
-        },{
-            type: "input",
-            name: "ID",
-            message: "What is the engineer's id?"
-        },{
-            type: "input",
-            name: "Email",
-            message: "What is the engineer's email?"
-        },{
-            type: "input",
-            name: "Github user",
-            message: "What is the engineer's Github username?"
+          type: "input",
+          message: "What is your name?",
+          name: "name",
         },
-    ]).then(response => {
-        // add new engineer to employees array
-        // promptForNextEmployee
-    })
-}
-// promptForEngineer();
-
-const promptForIntern = () => {
-    inquirer.prompt([
         {
-            type: "input",
-            name: "Name",
-            message: "What is the intern's name?"
-        },{
-            type: "input",
-            name: "ID",
-            message: "What is the intern's ID?"
-        },{
-            type: "input",
-            name: "Email",
-            message: "What is the intern's email?"
-        },{
-            type: "input",
-            name: "School",
-            message: "What is the intern's School?"
-        }
-    ]).then(response => {
-        // add new intern to employees array
-        // promptForNextEmployee
-    })
-}
-promptForIntern();
+          type: "input",
+          message: "What is your ID number?",
+          name: "id",
+        },
+        {
+          type: "input",
+          message: "What is your email?",
+          name: "email",
+        },
+        {
+          type: "list",
+          message: "What is your role?",
+          name: "role",
+          choices: ["Engineer", "Intern", "Manager"],
+        },
+      ])
+  
+  
+      
+        // if manager selected, answer these specific question
+        if (answers.role === "Manager") {
+          const managerAns = await inquirer
+            .prompt([
+              {
+                type: "input",
+                message: "What is your office number",
+                name: "officeNumber",
+              },
+            ])
+            const newManager = new Manager(
+              answers.name,
+              answers.id,
+              answers.email,
+              managerAns.officeNumber
+            );
+            newTeamMemberData.push(newManager);
+            
+          // if engineer selected answer these set of questions
+        } else if (answers.role === "Engineer") {
+          const githubAns = await inquirer
+            .prompt([
+              {
+                type: "input",
+                message: "What is your GitHub user name?",
+                name: "github",
+              }
+            ])
+              const newEngineer = new Engineer(
+                answers.name,
+                answers.id,
+                answers.email,
+                githubAns.github
+              );
+              newTeamMemberData.push(newEngineer);
+            
+          // if intern selected answer these set of questions
+        } else if (answers.role === "Intern") {
+          const internAns = await inquirer
+            .prompt([
+              {
+                type: "input",
+                message: "What university did you attend?",
+                name: "school",
+              },
+            ])
+            
+            const newIntern = new Intern(
+              answers.name,
+              answers.id,
+              answers.email,
+              internAns.school
+            );
+            newTeamMemberData.push(newIntern);          
+        } 
+    };  
 
-const buildPage = () => {
 
+
+async function promptQuestions() {
+  await questions()
+    
+  
+  const addMemberAns = await inquirer
+    .prompt([
+      {
+        name:'addMember',
+        type: 'list',
+        choices: ['Add a new member', 'Create team'],
+        message: "What would you like to do next?"
+      }
+    ])
+
+    if (addMemberAns.addMember === 'Add a new member') {
+      return promptQuestions()
+    }
+    return createTeam();
+}  
+
+promptQuestions();
+
+function createTeam () {
+  console.log("new guy", newTeamMemberData)
+  fs.writeFileSync(
+    "./output/index.html",
+    render(newTeamMemberData),
+    "utf-8"
+  );
 }
-function writeToFile(fileName, data) {
-    return fs.writeFileSync(path.join(process.cwd(), fileName), data);
-  }
-// creating the HTML
-function init() {
-    inquirer.prompt(questions).then((responses) => {
-      console.log("Creating Your Team Profile File...");
-      writeToFile("./output/Team.html", generateTeam({ ...responses }));
-    });
-  }
-  init();
